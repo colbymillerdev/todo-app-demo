@@ -28,7 +28,7 @@ const Todo = ({ todo, onSaveClick, onCancelClick }) => {
         <span className='py-2'>{todoText}</span>
       ) : (
         <input
-          className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-3/4 py-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+          className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-3/4 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
           type='text'
           value={editedText}
           onChange={handleInput}

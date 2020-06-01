@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
 
 import Button from '../Buttons/Button';
 import Todo from './Todo';
 import { getTodos } from '../../selectors';
+import { createTodo } from '../../api';
 
 const TodoContainer = () => {
-  const [todos, setTodos] = useState([]);
-  const [isCreateDisabled, disableCreate] = useState(false);
+  const [todoText, setTodoText] = useState('');
+  const refreshTodos = useResetRecoilState(getTodos);
 
+  // Component that returns fetched todos from Recoil state.
   const Todos = () => {
     const todos = useRecoilValueLoadable(getTodos);
 
@@ -24,31 +26,37 @@ const TodoContainer = () => {
     }
   };
 
-  const handleClick = () => {
-    const newTodo = {
-      message: '',
-      isCompleted: false,
-      isEditing: true,
-    };
-    disableCreate(true);
-    setTodos([...todos, newTodo]);
+  const handleCreateClick = async () => {
+    const newTodo = { message: todoText, isCompleted: false };
+    await createTodo(newTodo);
+    setTodoText('');
+
+    // Call force update that triggers Recoil selector.
+    refreshTodos();
   };
 
   const handleSaveClick = (todoText) => {
     console.log('Text:', todoText);
   };
 
-  const handleCancelClick = () => {
-    disableCreate(false);
-    const filteredTodos = todos.filter((todo) => todo.message.trim() !== '');
-    setTodos(filteredTodos);
-  };
+  const handleCancelClick = () => {};
+
+  const handleInput = (e) => setTodoText(e.target.value);
 
   return (
     <div className='bg-gray-300 flex items-center justify-center h-screen'>
       <div className='bg-gray-100 w-1/3 h-auto rounded overflow-hidden shadow-lg'>
         <div className='m-3'>
-          <Button buttonTitle='Create Todo' onClick={handleClick} isCreateDisabled={isCreateDisabled} />
+          <div className='flex justify-evenly'>
+            <input
+              className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-3/4 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 rounded shadow'
+              type='text'
+              placeholder='Enter a Todo'
+              value={todoText}
+              onChange={handleInput}
+            />
+            <Button buttonTitle='+' onClick={handleCreateClick} />
+          </div>
           <div className='mt-4 ml-4'>
             <Todos />
           </div>

@@ -24,10 +24,11 @@ const fetchAllEndpoint = async (req, res, next) => {
 
 const createTodoEndpoint = async (req, res, next) => {
   try {
-    const { message } = req.body;
+    const { message, isCompleted } = req.body;
 
     const params = {
       message,
+      isCompleted,
     };
 
     const response = await new Todo(params).save();

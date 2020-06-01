@@ -1,8 +1,8 @@
 import { atom } from 'recoil';
 
-const todos = atom({
-  key: 'todosState',
-  default: [],
+const todosTrigger = atom({
+  key: 'todosTrigger',
+  default: 0,
 });
 
-export { todos };
+export { todosTrigger };
