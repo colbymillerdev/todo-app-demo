@@ -4,7 +4,7 @@ const Todo = require('../models/Todo');
 
 const fetchAllEndpoint = async (req, res, next) => {
   try {
-    const todos = await Todo.find();
+    const todos = await Todo.find().sort({ createdAt: 'ascending' });
 
     // Make more readable for UI
     const response = todos.map((todo) => {
