@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
+
 import SaveCancelButtons from '../Buttons/SaveCancelButtons';
 import EditButton from '../Buttons/EditButton';
+import { editingState } from '../../atoms';
 
 const Todo = ({ todo, onSaveClick, onCancelClick }) => {
-  const [isEditing, setEditing] = useState(todo.isEditing || false);
+  // Example of using Recoil atomFamily to have separate state per element.
+  const [isEditing, setEditing] = useRecoilState(editingState(todo.id));
+
   const [todoText, setTodoText] = useState(todo.message);
   const [editedText, setEditText] = useState(todoText);
 
-  const handleEditClick = () => setEditing(!isEditing);
+  const handleEditClick = () => setEditing(true);
   const handleCancelClick = () => {
-    setEditing(!isEditing);
+    setEditing(false);
     setEditText(todoText);
     onCancelClick();
   };

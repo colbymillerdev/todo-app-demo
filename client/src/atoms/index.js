@@ -1,8 +1,13 @@
-import { atom } from 'recoil';
+import { atom, atomFamily } from 'recoil';
 
 const todosTrigger = atom({
   key: 'todosTrigger',
   default: 0,
 });
 
-export { todosTrigger };
+const editingState = atomFamily({
+  key: 'editingState',
+  default: false,
+});
+
+export { todosTrigger, editingState };
