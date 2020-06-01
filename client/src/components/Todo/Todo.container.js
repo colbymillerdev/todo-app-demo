@@ -1,22 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useRecoilValueLoadable } from 'recoil';
 
-import { fetchTodos } from '../../api';
 import Button from '../Buttons/Button';
 import Todo from './Todo';
+import { getTodos } from '../../selectors';
 
 const TodoContainer = () => {
   const [todos, setTodos] = useState([]);
   const [isCreateDisabled, disableCreate] = useState(false);
 
-  const fetchData = async () => {
-    const results = await fetchTodos();
-    setTodos(results.data);
-  };
+  const Todos = () => {
+    const todos = useRecoilValueLoadable(getTodos);
 
-  useEffect(() => {
-    console.log('in');
-    fetchData();
-  }, []);
+    switch (todos.state) {
+      case 'hasValue':
+        return todos.contents.map((todo, index) => (
+          <Todo key={todo.id || index} todo={todo} onSaveClick={handleSaveClick} onCancelClick={handleCancelClick} />
+        ));
+      case 'loading':
+        return 'Loading...';
+      case 'hasError':
+        return 'There was an error loading todos.';
+    }
+  };
 
   const handleClick = () => {
     const newTodo = {
@@ -44,14 +50,7 @@ const TodoContainer = () => {
         <div className='m-3'>
           <Button buttonTitle='Create Todo' onClick={handleClick} isCreateDisabled={isCreateDisabled} />
           <div className='mt-4 ml-4'>
-            {todos.map((todo, index) => (
-              <Todo
-                key={todo.id || index}
-                todo={todo}
-                onSaveClick={handleSaveClick}
-                onCancelClick={handleCancelClick}
-              />
-            ))}
+            <Todos />
           </div>
         </div>
       </div>
