@@ -1,4 +1,4 @@
-import { atom, selector, useRecoilState, useRecoilValue, DefaultValue } from 'recoil';
+import { selector, DefaultValue } from 'recoil';
 
 import { fetchTodos } from '../api/';
 import { todosTrigger } from '../atoms';
@@ -6,7 +6,6 @@ import { todosTrigger } from '../atoms';
 const getTodos = selector({
   key: 'getTodos',
   get: async ({ get }) => {
-    console.log('updating');
     get(todosTrigger); // Register the selector to force update.
     const todos = await fetchTodos();
     return todos.data;
