@@ -1,27 +1,35 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 
 import SaveCancelButtons from '../Buttons/SaveCancelButtons';
-import EditButton from '../Buttons/EditButton';
+import EditDeleteButtons from '../Buttons/EditDeleteButtons';
 import { editingState } from '../../atoms';
+import { deleteTodo } from '../../api';
+import { getTodos } from '../../selectors';
 
-const Todo = ({ todo, onSaveClick, onCancelClick }) => {
+const Todo = ({ todo }) => {
   // Example of using Recoil atomFamily to have separate state per element.
   const [isEditing, setEditing] = useRecoilState(editingState(todo.id));
 
   const [todoText, setTodoText] = useState(todo.message);
   const [editedText, setEditText] = useState(todoText);
+  const refreshTodos = useResetRecoilState(getTodos);
 
   const handleEditClick = () => setEditing(true);
+
   const handleCancelClick = () => {
     setEditing(false);
     setEditText(todoText);
-    onCancelClick();
   };
+
   const handleSaveClick = () => {
     setEditing(false);
     setTodoText(editedText);
-    onSaveClick(todoText);
+  };
+
+  const handleDeleteClick = async () => {
+    await deleteTodo(todo.id);
+    refreshTodos();
   };
 
   const handleInput = (e) => setEditText(e.target.value);
@@ -43,7 +51,7 @@ const Todo = ({ todo, onSaveClick, onCancelClick }) => {
       {isEditing ? (
         <SaveCancelButtons todoText={todoText} onSaveClick={handleSaveClick} onCancelClick={handleCancelClick} />
       ) : (
-        <EditButton onClick={handleEditClick} />
+        <EditDeleteButtons onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
       )}
     </div>
   );

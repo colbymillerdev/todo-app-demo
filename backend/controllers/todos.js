@@ -39,7 +39,23 @@ const createTodoEndpoint = async (req, res, next) => {
   }
 };
 
+const deleteTodoEndpoint = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const todo = await Todo.findById(id);
+    if (!todo) res.status(404).json({ message: 'Todo not found.' });
+
+    if (todo) todo.deleteOne({ id });
+
+    res.status(200).json({ success: true });
+  } catch (e) {
+    next(e);
+  }
+};
+
 router.get('/', fetchAllEndpoint);
 router.post('/', createTodoEndpoint);
+router.delete('/:id', deleteTodoEndpoint);
 
 module.exports = { router };

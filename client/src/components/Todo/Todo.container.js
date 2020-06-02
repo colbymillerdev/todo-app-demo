@@ -16,9 +16,7 @@ const TodoContainer = () => {
 
     switch (todos.state) {
       case 'hasValue':
-        return todos.contents.map((todo, index) => (
-          <Todo key={todo.id || index} todo={todo} onSaveClick={handleSaveClick} onCancelClick={handleCancelClick} />
-        ));
+        return todos.contents.map((todo, index) => <Todo key={todo.id || index} todo={todo} />);
       case 'loading':
         return 'Loading...';
       case 'hasError':
@@ -34,12 +32,6 @@ const TodoContainer = () => {
     // Call force update that triggers Recoil selector.
     refreshTodos();
   };
-
-  const handleSaveClick = (todoText) => {
-    console.log('Text:', todoText);
-  };
-
-  const handleCancelClick = () => {};
 
   const handleInput = (e) => setTodoText(e.target.value);
 
