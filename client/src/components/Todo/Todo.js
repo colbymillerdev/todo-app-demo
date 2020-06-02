@@ -4,27 +4,30 @@ import { useRecoilState, useResetRecoilState } from 'recoil';
 import SaveCancelButtons from '../Buttons/SaveCancelButtons';
 import EditDeleteButtons from '../Buttons/EditDeleteButtons';
 import { editingState } from '../../atoms';
-import { deleteTodo } from '../../api';
+import { deleteTodo, updateTodo } from '../../api';
 import { getTodos } from '../../selectors';
 
 const Todo = ({ todo }) => {
   // Example of using Recoil atomFamily to have separate state per element.
   const [isEditing, setEditing] = useRecoilState(editingState(todo.id));
 
-  const [todoText, setTodoText] = useState(todo.message);
-  const [editedText, setEditText] = useState(todoText);
+  const [editedText, setEditText] = useState(todo.message);
   const refreshTodos = useResetRecoilState(getTodos);
 
   const handleEditClick = () => setEditing(true);
 
   const handleCancelClick = () => {
     setEditing(false);
-    setEditText(todoText);
+    setEditText(todo.message);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     setEditing(false);
-    setTodoText(editedText);
+
+    const body = { message: editedText };
+
+    await updateTodo(todo.id, body);
+    refreshTodos();
   };
 
   const handleDeleteClick = async () => {
@@ -38,7 +41,7 @@ const Todo = ({ todo }) => {
     <div className='mt-2 flex items-center'>
       <input type='checkbox' className='mr-2' disabled={isEditing} />
       {!isEditing ? (
-        <span className='py-2'>{todoText}</span>
+        <span className='py-2'>{todo.message}</span>
       ) : (
         <input
           className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-3/4 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
@@ -49,7 +52,7 @@ const Todo = ({ todo }) => {
       )}
 
       {isEditing ? (
-        <SaveCancelButtons todoText={todoText} onSaveClick={handleSaveClick} onCancelClick={handleCancelClick} />
+        <SaveCancelButtons todoText={todo.message} onSaveClick={handleSaveClick} onCancelClick={handleCancelClick} />
       ) : (
         <EditDeleteButtons onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
       )}
