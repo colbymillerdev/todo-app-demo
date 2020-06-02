@@ -12,6 +12,7 @@ const Todo = ({ todo }) => {
   const [isEditing, setEditing] = useRecoilState(editingState(todo.id));
 
   const [editedText, setEditText] = useState(todo.message);
+  const [isCompleted, setCompleted] = useState(todo.isCompleted);
   const refreshTodos = useResetRecoilState(getTodos);
 
   const handleEditClick = () => setEditing(true);
@@ -35,13 +36,26 @@ const Todo = ({ todo }) => {
     refreshTodos();
   };
 
+  const handleCompletedClick = async () => {
+    setCompleted(!isCompleted);
+
+    const body = { isCompleted: !isCompleted };
+    await updateTodo(todo.id, body);
+  };
+
   const handleInput = (e) => setEditText(e.target.value);
 
   return (
     <div className='mt-2 flex items-center'>
-      <input type='checkbox' className='mr-2' disabled={isEditing} />
+      <input
+        type='checkbox'
+        className='mr-2'
+        disabled={isEditing}
+        onChange={handleCompletedClick}
+        checked={isCompleted}
+      />
       {!isEditing ? (
-        <span className='py-2'>{todo.message}</span>
+        <span className='py-2'>{isCompleted ? <strike>{todo.message}</strike> : todo.message}</span>
       ) : (
         <input
           className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-3/4 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'

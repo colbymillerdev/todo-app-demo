@@ -57,12 +57,13 @@ const deleteTodoEndpoint = async (req, res, next) => {
 const updateTodoEndpoint = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { message } = req.body;
+    const { message, isCompleted } = req.body;
 
     const todo = await Todo.findById(id);
     if (!todo) res.status(404).json({ message: 'Todo not found.' });
 
-    todo.message = message;
+    if (message) todo.message = message;
+    if (isCompleted === true || isCompleted === false) todo.isCompleted = isCompleted;
 
     await Todo(todo).save();
     res.status(200).json({ success: true });
