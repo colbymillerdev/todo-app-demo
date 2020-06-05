@@ -55,7 +55,7 @@ const Todo = ({ todo }) => {
         checked={isCompleted}
       />
       {!isEditing ? (
-        <span className='py-2'>{isCompleted ? <strike>{todo.message}</strike> : todo.message}</span>
+        <span className='py-2 mr-4'>{isCompleted ? <strike>{todo.message}</strike> : todo.message}</span>
       ) : (
         <input
           className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-4/5 p-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
