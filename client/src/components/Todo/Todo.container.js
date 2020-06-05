@@ -37,9 +37,9 @@ const TodoContainer = () => {
 
   return (
     <div className='bg-gray-300 flex items-center justify-center h-screen'>
-      <div className='bg-gray-100 w-1/3 h-auto rounded overflow-hidden shadow-lg'>
+      <div className='bg-gray-100 py-4 sm:w-auto md:w-2/3 max-w-5xl h- rounded overflow-hidden shadow-lg'>
         <div className='m-3'>
-          <div className='flex justify-evenly'>
+          <div className='flex justify-between ml-4'>
             <input
               className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-3/4 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 rounded shadow'
               type='text'

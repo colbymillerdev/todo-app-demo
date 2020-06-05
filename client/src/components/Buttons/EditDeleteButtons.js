@@ -4,7 +4,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 
 const EditButton = ({ onEditClick, onDeleteClick }) => {
   return (
-    <div className='ml-auto'>
+    <div className='ml-auto flex'>
       <button className='align-middle mr-2' onClick={onEditClick}>
         <FiEdit2 />
       </button>
