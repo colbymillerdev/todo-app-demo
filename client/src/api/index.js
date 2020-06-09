@@ -1,7 +1,8 @@
 import axios from 'axios';
+require('dotenv').config();
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api/v1',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1',
 });
 
 export const fetchTodos = () => api.get(`/todos`);
