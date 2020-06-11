@@ -4,7 +4,8 @@ const Todo = require('../models/Todo');
 
 const fetchAllEndpoint = async (req, res, next) => {
   try {
-    const todos = await Todo.find().sort({ createdAt: 'ascending' });
+    const { uuid } = req.params;
+    const todos = await Todo.find({ uuid }).sort({ createdAt: 'ascending' });
 
     // Make more readable for UI
     const response = todos.map((todo) => {
@@ -24,11 +25,12 @@ const fetchAllEndpoint = async (req, res, next) => {
 
 const createTodoEndpoint = async (req, res, next) => {
   try {
-    const { message, isCompleted } = req.body;
+    const { message, isCompleted, uuid } = req.body;
 
     const params = {
       message,
       isCompleted,
+      uuid,
     };
 
     const response = await new Todo(params).save();
@@ -72,7 +74,7 @@ const updateTodoEndpoint = async (req, res, next) => {
   }
 };
 
-router.get('/', fetchAllEndpoint);
+router.get('/:uuid', fetchAllEndpoint);
 router.post('/', createTodoEndpoint);
 router.delete('/:id', deleteTodoEndpoint);
 router.put('/:id', updateTodoEndpoint);

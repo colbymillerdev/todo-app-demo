@@ -5,6 +5,7 @@ const Todo = new Schema(
   {
     message: { type: String, required: true },
     isCompleted: { type: Boolean },
+    uuid: { type: String, required: true },
   },
   { timestamps: true }
 );
