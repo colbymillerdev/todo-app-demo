@@ -1,14 +1,33 @@
-import React, { useState } from 'react';
-import { useRecoilValueLoadable, useResetRecoilState } from 'recoil';
+import React, { useState, useEffect } from 'react';
+import { useRecoilValueLoadable, useResetRecoilState, useRecoilState } from 'recoil';
 
 import Button from '../Buttons/Button';
 import Todo from './Todo';
+import { uuidState } from '../../atoms';
 import { getTodos } from '../../selectors';
-import { createTodo } from '../../api';
+import { createTodo, createUser } from '../../api';
+
+const LOCAL_STORAGE_KEY = 'todoUserId';
 
 const TodoContainer = () => {
   const [todoText, setTodoText] = useState('');
+  const [currentUuid, setUuid] = useRecoilState(uuidState);
   const refreshTodos = useResetRecoilState(getTodos);
+
+  const determineUser = async () => {
+    if (currentUuid) return;
+
+    const {
+      data: { uuid },
+    } = await createUser();
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, uuid);
+    setUuid(uuid);
+  };
+
+  useEffect(() => {
+    determineUser();
+  }, []);
 
   // Component that returns fetched todos from Recoil state.
   const Todos = () => {
@@ -25,7 +44,7 @@ const TodoContainer = () => {
   };
 
   const handleCreateClick = async () => {
-    const newTodo = { message: todoText, isCompleted: false };
+    const newTodo = { message: todoText, isCompleted: false, uuid: currentUuid };
     await createTodo(newTodo);
     setTodoText('');
 

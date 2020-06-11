@@ -10,4 +10,9 @@ const editingState = atomFamily({
   default: false,
 });
 
-export { todosTrigger, editingState };
+const uuidState = atom({
+  key: 'uuidState',
+  default: localStorage.getItem('todoUserId'),
+});
+
+export { todosTrigger, editingState, uuidState };
