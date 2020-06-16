@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const router = require('./lib/routes');
+const { wakeDynos } = require('./lib/wakeDyno');
 
 const app = express();
 const apiPort = process.env.PORT || 5000;
@@ -23,4 +24,7 @@ mongoose
 // Setup global router
 app.use('/api/v1/', router());
 
-app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
+app.listen(apiPort, () => {
+  console.log(`Server running on port ${apiPort}`);
+  wakeDynos([process.env.HEROKU_UI_URL, process.env.HEROKU_API_URL]);
+});
