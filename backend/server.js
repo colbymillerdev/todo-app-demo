@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const router = require('./lib/routes');
-const { wakeDynos } = require('./lib/wakeDyno');
+const { wakeDynos } = require('heroku-keep-awake');
 
 const app = express();
 const apiPort = process.env.PORT || 5000;
