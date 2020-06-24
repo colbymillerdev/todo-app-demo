@@ -26,5 +26,10 @@ app.use('/api/v1/', router());
 
 app.listen(apiPort, () => {
   console.log(`Server running on port ${apiPort}`);
-  wakeDynos([process.env.HEROKU_UI_URL, process.env.HEROKU_API_URL]);
+
+  const opts = {
+    stopTimes: { start: '02:00', end: '08:00' },
+  };
+
+  wakeDynos([process.env.HEROKU_UI_URL, process.env.HEROKU_API_URL], opts);
 });
